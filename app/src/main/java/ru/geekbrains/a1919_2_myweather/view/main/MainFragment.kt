@@ -10,11 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.geekbrains.a1919_2_myweather.R
 import ru.geekbrains.a1919_2_myweather.databinding.MainFragmentBinding
+import ru.geekbrains.a1919_2_myweather.viewmodel.AppState
 import ru.geekbrains.a1919_2_myweather.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-     private var binding: MainFragmentBinding? = null
+    private var binding: MainFragmentBinding? = null
 
     companion object {
         fun newInstance() = MainFragment()
@@ -24,7 +25,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(inflater,container,false)
+        binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding!!.root
     }
 
@@ -32,8 +33,8 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = object : Observer<Any> {
-            override fun onChanged(data: Any) {
+        val observer = object : Observer<AppState> {
+            override fun onChanged(data: AppState) {
                 renderData(data)
             }
         }
@@ -41,8 +42,20 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
-    private fun renderData(data: Any) {
-        Toast.makeText(requireContext(), "Работает", Toast.LENGTH_SHORT).show()
+    private fun renderData(data: AppState) {
+        when (data) {
+            is AppState.Error -> {
+                binding?.loadingLayout?.visibility = View.GONE
+                binding?.message?.text = "Не получилось ${data.error}"
+            }
+            is AppState.Loading -> {
+                binding?.loadingLayout?.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding?.loadingLayout?.visibility = View.GONE
+                binding?.message?.text = "Получилось"
+            }
+        }
     }
 
     override fun onDestroy() {
