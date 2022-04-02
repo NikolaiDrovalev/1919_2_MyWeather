@@ -1,7 +1,7 @@
 package ru.geekbrains.a1919_2_myweather.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.geekbrains.a1919_2_myweather.R
 import ru.geekbrains.a1919_2_myweather.view.main.MainFragment
 
