@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import ru.geekbrains.a1919_2_myweather.R
 import ru.geekbrains.a1919_2_myweather.databinding.MainFragmentBinding
 import ru.geekbrains.a1919_2_myweather.viewmodel.AppState
@@ -46,14 +47,16 @@ class MainFragment : Fragment() {
         when (data) {
             is AppState.Error -> {
                 binding?.loadingLayout?.visibility = View.GONE
-                binding?.message?.text = "Не получилось ${data.error}"
+                binding?.mainView?.let { Snackbar.make(it,"Не получилось ${data.error}",Snackbar.LENGTH_LONG).show() }
+                //binding?.message?.text = "Не получилось ${data.error}"
             }
             is AppState.Loading -> {
                 binding?.loadingLayout?.visibility = View.VISIBLE
             }
             is AppState.Success -> {
                 binding?.loadingLayout?.visibility = View.GONE
-                binding?.message?.text = "Получилось"
+                binding?.mainView?.let { Snackbar.make(it,"Получилось",Snackbar.LENGTH_LONG).show() }
+                //binding?.message?.text = "Получилось"
             }
         }
     }
