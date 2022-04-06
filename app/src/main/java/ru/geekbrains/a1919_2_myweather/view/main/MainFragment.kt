@@ -14,7 +14,11 @@ import ru.geekbrains.a1919_2_myweather.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-    private var binding: MainFragmentBinding? = null
+    private var _binding: MainFragmentBinding? = null
+    private val binding:MainFragmentBinding
+    get(){
+        return _binding!!
+    }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -24,8 +28,8 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(inflater, container, false)
-        return binding!!.root
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,8 +48,8 @@ class MainFragment : Fragment() {
     private fun renderData(data: AppState) {
         when (data) {
             is AppState.Error -> {
-                binding?.loadingLayout?.visibility = View.GONE
-                binding?.mainView?.let {
+                binding.loadingLayout.visibility = View.GONE
+                binding.mainView.let {
                     Snackbar.make(
                         it,
                         "Не получилось ${data.error}",
@@ -54,16 +58,16 @@ class MainFragment : Fragment() {
                 }
             }
             is AppState.Loading -> {
-                binding?.loadingLayout?.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = View.VISIBLE
             }
             is AppState.Success -> {
-                binding?.loadingLayout?.visibility = View.GONE
-                binding?.cityName?.text = data.weatherData.city.name
-                binding?.temperatureValue?.text = data.weatherData.temperature.toString()
-                binding?.feelsLikeValue?.text = data.weatherData.feelsLike.toString()
-                binding?.cityCoordinates?.text =
+                binding.loadingLayout.visibility = View.GONE
+                binding.cityName.text = data.weatherData.city.name
+                binding.temperatureValue.text = data.weatherData.temperature.toString()
+                binding.feelsLikeValue.text = data.weatherData.feelsLike.toString()
+                binding.cityCoordinates.text =
                     "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
-                binding?.mainView?.let {
+                binding.mainView.let {
                     Snackbar.make(it, "Получилось", Snackbar.LENGTH_LONG).show()
                 }
             }
@@ -72,6 +76,6 @@ class MainFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 }
