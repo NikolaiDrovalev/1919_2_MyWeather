@@ -3,7 +3,7 @@ package ru.geekbrains.a1919_2_myweather.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.geekbrains.a1919_2_myweather.R
-import ru.geekbrains.a1919_2_myweather.view.main.MainFragment
+import ru.geekbrains.a1919_2_myweather.view.weatherlist.WeatherListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance()).commit()
+                .replace(R.id.container, WeatherListFragment.newInstance()).commit()
         }
     }
 }
