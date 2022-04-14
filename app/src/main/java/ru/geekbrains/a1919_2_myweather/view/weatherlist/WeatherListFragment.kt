@@ -89,7 +89,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
                 binding.root.let {
                     Snackbar.make(
                         it,
-                        "Не получилось ${data.error}",
+                        getString(R.string.failed)+"${data.error}",
                         Snackbar.LENGTH_LONG
                     ).show()
                 }

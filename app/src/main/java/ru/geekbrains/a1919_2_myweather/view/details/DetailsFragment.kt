@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import ru.geekbrains.a1919_2_myweather.R
 import ru.geekbrains.a1919_2_myweather.databinding.DetailsFragmentBinding
 import ru.geekbrains.a1919_2_myweather.repository.Weather
 import ru.geekbrains.a1919_2_myweather.utils.KEY_BUNDLE_WEATHER
@@ -43,7 +44,7 @@ class DetailsFragment : Fragment() {
         binding.temperatureValue.text = weather.temperature.toString()
         binding.feelsLikeValue.text = weather.feelsLike.toString()
         binding.cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-        Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(binding.mainView, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
     }
 
     companion object {
