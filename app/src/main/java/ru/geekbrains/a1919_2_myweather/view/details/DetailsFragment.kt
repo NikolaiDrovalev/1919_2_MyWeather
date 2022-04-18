@@ -1,5 +1,6 @@
 package ru.geekbrains.a1919_2_myweather.view.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,18 +35,25 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather: Weather = requireArguments().getParcelable<Weather>(KEY_BUNDLE_WEATHER)!!
-        renderData(weather)
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let { renderData(it) }
+
     }
 
+    @SuppressLint("SetTextI18n")
     private fun renderData(weather: Weather) {
-        binding.loadingLayout.visibility = View.GONE
-        binding.cityName.text = weather.city.name.toString()
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
-        Snackbar.make(binding.mainView, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
+        with(binding) {
+            loadingLayout.visibility = View.GONE
+            weather.also{
+                cityName.text = it.city.name
+                temperatureValue.text = it.temperature.toString()
+                feelsLikeValue.text = it.feelsLike.toString()
+                cityCoordinates.text = "${it.city.lat} ${it.city.lon}"
+            }
+            mainView.showSnackBar()
+        }
     }
+
+    private fun View.showSnackBar() =  Snackbar.make(this, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
 
     companion object {
         @JvmStatic

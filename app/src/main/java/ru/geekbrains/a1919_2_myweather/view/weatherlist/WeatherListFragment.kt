@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.geekbrains.a1919_2_myweather.R
@@ -42,19 +43,20 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
 
     private var isRussian = true
 
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecycler()
-
-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val observer = object : Observer<AppState> {
-            override fun onChanged(data: AppState) {
-                renderData(data)
-            }
-        }
+        val observer = { data: AppState -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
+        setupFab()
+        viewModel.getWeatherRussia()
+    }
 
+    private fun setupFab() {
         binding.floatingActionButton.setOnClickListener {
             isRussian = !isRussian
             if (isRussian) {
@@ -75,12 +77,9 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
                 )
             }
         }
-        viewModel.getWeatherRussia()
     }
 
-    private fun initRecycler() {
-        binding.recyclerView.adapter = adapter
-    }
+    private fun initRecycler() = adapter.apply { binding.recyclerView.adapter = adapter }
 
     private fun renderData(data: AppState) {
         when (data) {
@@ -89,7 +88,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
                 binding.root.let {
                     Snackbar.make(
                         it,
-                        getString(R.string.failed)+"${data.error}",
+                        getString(R.string.failed) + "${data.error}",
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
@@ -110,10 +109,16 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(KEY_BUNDLE_WEATHER, weather)
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, DetailsFragment.newInstance(bundle)).addToBackStack("")
+            .replace(
+                R.id.container,
+                DetailsFragment.newInstance(Bundle().apply {
+                    putParcelable(
+                        KEY_BUNDLE_WEATHER,
+                        weather
+                    )
+                })
+            ).addToBackStack("")
             .commit()
     }
 }
