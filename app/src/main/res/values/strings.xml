@@ -4,4 +4,6 @@
     <string name="feels_like_label">Ощущается как</string>
     <string name="happened">Получилось</string>
     <string name="failed">\"Не получилось \"</string>
+    <string name="error">ошибка</string>
+    <string name="try_again">попробуй еще</string>
 </resources>

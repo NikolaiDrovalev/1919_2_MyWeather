@@ -39,7 +39,7 @@ class DetailsFragment : Fragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "StringFormatInvalid")
     private fun renderData(weather: Weather) {
         with(binding) {
             loadingLayout.visibility = View.GONE
@@ -55,6 +55,7 @@ class DetailsFragment : Fragment() {
 
     private fun View.showSnackBar() =  Snackbar.make(this, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
 
+
     companion object {
         @JvmStatic
         fun newInstance(bundle: Bundle): DetailsFragment {
@@ -64,3 +65,4 @@ class DetailsFragment : Fragment() {
         }
     }
 }
+
