@@ -1,9 +1,16 @@
 package ru.geekbrains.a1919_2_myweather.repository
 
+import com.google.gson.annotations.SerializedName
+
 data class WeatherDTO(
+    @SerializedName("fact")
     val factDTO: FactDTO,
+    @SerializedName("forecast")
     val forecastDTO: ForecastDTO,
+    @SerializedName("info")
     val infoDTO: InfoDTO,
+    @SerializedName("now")
     val now: Int,
-    val now_dt: String
+    @SerializedName("now_dt")
+    val nowDt: String
 )

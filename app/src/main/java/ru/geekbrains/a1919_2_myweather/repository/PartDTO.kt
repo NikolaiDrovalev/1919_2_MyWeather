@@ -1,22 +1,42 @@
 package ru.geekbrains.a1919_2_myweather.repository
 
+import com.google.gson.annotations.SerializedName
+
 data class PartDTO(
+    @SerializedName("condition")
     val condition: String,
+    @SerializedName("daytime")
     val daytime: String,
-    val feels_like: Int,
+    @SerializedName("feels_like")
+    val feelsLike: Int,
+    @SerializedName("humidity")
     val humidity: Int,
+    @SerializedName("icon")
     val icon: String,
-    val part_name: String,
+    @SerializedName("part_name")
+    val partName: String,
+    @SerializedName("polar")
     val polar: Boolean,
-    val prec_mm: Double,
-    val prec_period: Int,
-    val prec_prob: Int,
-    val pressure_mm: Int,
-    val pressure_pa: Int,
-    val temp_avg: Int,
-    val temp_max: Int,
-    val temp_min: Int,
-    val wind_dir: String,
-    val wind_gust: Double,
-    val wind_speed: Double
+    @SerializedName("prec_mm")
+    val precMm: Int,
+    @SerializedName("prec_period")
+    val precPeriod: Int,
+    @SerializedName("prec_prob")
+    val precProb: Int,
+    @SerializedName("pressure_mm")
+    val pressureMm: Int,
+    @SerializedName("pressure_pa")
+    val pressurePa: Int,
+    @SerializedName("temp_avg")
+    val tempAvg: Int,
+    @SerializedName("temp_max")
+    val tempMax: Int,
+    @SerializedName("temp_min")
+    val tempMin: Int,
+    @SerializedName("wind_dir")
+    val windDir: String,
+    @SerializedName("wind_gust")
+    val windGust: Double,
+    @SerializedName("wind_speed")
+    val windSpeed: Double
 )

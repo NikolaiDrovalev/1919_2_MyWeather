@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import ru.geekbrains.a1919_2_myweather.R
 import ru.geekbrains.a1919_2_myweather.databinding.DetailsFragmentBinding
+import ru.geekbrains.a1919_2_myweather.repository.OnServerResponse
 import ru.geekbrains.a1919_2_myweather.repository.Weather
+import ru.geekbrains.a1919_2_myweather.repository.WeatherDTO
+import ru.geekbrains.a1919_2_myweather.repository.WeatherLoader
 import ru.geekbrains.a1919_2_myweather.utils.KEY_BUNDLE_WEATHER
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(), OnServerResponse {
 
     private var _binding: DetailsFragmentBinding? = null
     private val binding: DetailsFragmentBinding
@@ -33,27 +36,31 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
+    lateinit var currentCityName: String
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let { renderData(it) }
-
+        arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
+            currentCityName = it.city.name
+            WeatherLoader(this@DetailsFragment).loadWeather(it.city.lat, it.city.lon)
+        }
     }
 
     @SuppressLint("SetTextI18n", "StringFormatInvalid")
-    private fun renderData(weather: Weather) {
+    private fun renderData(weather: WeatherDTO) {
         with(binding) {
             loadingLayout.visibility = View.GONE
-            weather.also{
-                cityName.text = it.city.name
-                temperatureValue.text = it.temperature.toString()
-                feelsLikeValue.text = it.feelsLike.toString()
-                cityCoordinates.text = "${it.city.lat} ${it.city.lon}"
+            cityName.text = currentCityName
+            weather.also {
+                temperatureValue.text = weather.factDTO.temperature.toString()
+                feelsLikeValue.text = weather.factDTO.feelsLike.toString()
+                cityCoordinates.text = "${weather.infoDTO.lat} ${weather.infoDTO.lon}"
             }
             mainView.showSnackBar()
         }
     }
 
-    private fun View.showSnackBar() =  Snackbar.make(this, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
+    private fun View.showSnackBar() =
+        Snackbar.make(this, getString(R.string.happened), Snackbar.LENGTH_LONG).show()
 
 
     companion object {
@@ -63,6 +70,9 @@ class DetailsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+    override fun onResponse(weatherDTO: WeatherDTO) {
+        renderData(weatherDTO)
     }
 }
 
