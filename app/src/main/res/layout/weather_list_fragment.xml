@@ -9,7 +9,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -19,7 +19,7 @@
         app:maxImageSize="56dp"
         app:tint="@null"
         android:layout_margin="20dp"
-        android:src="@drawable/ic_russia"/>
+        android:src="@drawable/ic_russia" />
 
     <FrameLayout
         android:id="@+id/loadingLayout"

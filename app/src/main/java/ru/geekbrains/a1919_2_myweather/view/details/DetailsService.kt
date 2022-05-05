@@ -1,26 +1,31 @@
-package ru.geekbrains.a1919_2_myweather.repository
+package ru.geekbrains.a1919_2_myweather.view.details
 
-import android.os.Handler
-import android.os.Looper
+import android.app.IntentService
+import android.content.Intent
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import ru.geekbrains.a1919_2_myweather.BuildConfig
 import ru.geekbrains.a1919_2_myweather.repository.dto.WeatherDTO
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_API_KEY
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_DOMAIN_HARD_MODE
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_PATH
+import ru.geekbrains.a1919_2_myweather.utils.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
 
-    fun loadWeather(lat: Double, lon: Double) {
-        val urlText = "${YANDEX_DOMAIN_HARD_MODE}${YANDEX_PATH}lat=$lat&lon=$lon"
-        val uri = URL(urlText)
+class DetailsService(val name: String = "") : IntentService(name) {
 
-        Thread {
+    override fun onHandleIntent(intent: Intent?) {
+        Log.d("@@@", "work DetailsService")
+        intent?.let {
+            val lat = it.getDoubleExtra(KEY_BUNDLE_LAT, 0.0)
+            val lon = it.getDoubleExtra(KEY_BUNDLE_LON, 0.0)
+            Log.d("@@@", "work DetailsService $lat $lon")
+
+            val urlText = "$YANDEX_DOMAIN_HARD_MODE${YANDEX_PATH}lat=$lat&lon=$lon"
+            val uri = URL(urlText)
+
             val urlConnection: HttpURLConnection =
                 (uri.openConnection() as HttpURLConnection).apply {
                     connectTimeout = 1000
@@ -44,15 +49,15 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
                         Log.e("@@@", "$responseCode + $responseMessage")
                         val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
                         val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
-                        Handler(Looper.getMainLooper()).post {
-                            onServerResponseListener.onResponse(weatherDTO)
-                        }
+                        val message = Intent(KEY_WAVE_SERVICE_BROADCAST)
+                        message.putExtra(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER, weatherDTO)
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(message)
                     }
+                    else -> {}
                 }
             } finally {
                 urlConnection.disconnect()
             }
-
-        }.start()
+        }
     }
 }

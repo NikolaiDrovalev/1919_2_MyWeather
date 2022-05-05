@@ -1,7 +1,10 @@
-package ru.geekbrains.a1919_2_myweather.repository
+package ru.geekbrains.a1919_2_myweather.repository.dto
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ForecastDTO(
     @SerializedName("date")
     val date: String,
@@ -19,4 +22,4 @@ data class ForecastDTO(
     val sunset: String,
     @SerializedName("week")
     val week: Int
-)
+) : Parcelable
