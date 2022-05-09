@@ -14,9 +14,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-class DetailsService(val name : String = ""):IntentService(name) {
+class DetailsService(val name: String = "") : IntentService(name) {
 
-    override fun onHandleIntent(intent : Intent?) {
+    override fun onHandleIntent(intent: Intent?) {
         Log.d("@@@", "work DetailsService")
         intent?.let {
             val lat = it.getDoubleExtra(KEY_BUNDLE_LAT, 0.0)

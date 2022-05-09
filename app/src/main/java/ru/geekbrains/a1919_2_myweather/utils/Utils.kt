@@ -1,5 +1,10 @@
 package ru.geekbrains.a1919_2_myweather.utils
 
+import ru.geekbrains.a1919_2_myweather.repository.Weather
+import ru.geekbrains.a1919_2_myweather.repository.dto.FactDTO
+import ru.geekbrains.a1919_2_myweather.repository.dto.WeatherDTO
+import ru.geekbrains.a1919_2_myweather.repository.getDefaultCity
+
 
 const val KEY_BUNDLE_WEATHER = "weather"
 const val YANDEX_API_KEY = "X-Yandex-API-Key"
@@ -12,4 +17,10 @@ const val YANDEX_ENDPOINT = "v2/informers?"
 
 
 class Utils {
+}
+
+
+fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {
+    val fact: FactDTO = weatherDTO.factDTO
+    return (Weather(getDefaultCity(), fact.temperature, fact.feelsLike, fact.icon))
 }

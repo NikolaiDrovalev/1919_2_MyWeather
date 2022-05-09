@@ -6,9 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import ru.geekbrains.a1919_2_myweather.BuildConfig
 import ru.geekbrains.a1919_2_myweather.repository.dto.WeatherDTO
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_API_KEY
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_DOMAIN_HARD_MODE
-import ru.geekbrains.a1919_2_myweather.utils.YANDEX_ENDPOINT
+import ru.geekbrains.a1919_2_myweather.utils.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -17,7 +15,8 @@ import java.net.URL
 class WeatherLoader(private val onServerResponseListener: OnServerResponse) {
 
     fun loadWeather(lat: Double, lon: Double) {
-        val urlText = "${YANDEX_DOMAIN_HARD_MODE}${YANDEX_ENDPOINT}lat=$lat&lon=$lon"
+        val urlText =
+            "${YANDEX_DOMAIN_HARD_MODE}${YANDEX_ENDPOINT}$KEY_BUNDLE_LAT=$lat&$KEY_BUNDLE_LON=$lon"
         val uri = URL(urlText)
 
         Thread {
